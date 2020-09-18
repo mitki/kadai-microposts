@@ -14,6 +14,10 @@ class MicropostsController < ApplicationController
       render 'toppages/index'
     end
   end
+  
+  def show
+    @micropost = Micropost.find(params[:id])
+  end
 
   def destroy
     @micropost.destroy
@@ -25,5 +29,12 @@ class MicropostsController < ApplicationController
 
   def micropost_params
     params.require(:micropost).permit(:content)
+  end
+  
+  def correct_user
+    @micropost = current_user.microposts.find_by(id: params[:id])
+    unless @micropost
+      redirect_to root_url
+    end
   end
 end
